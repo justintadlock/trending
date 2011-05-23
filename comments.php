@@ -5,7 +5,7 @@
  * Lists comments and calls the comment form.  Individual comments have their own templates.  The 
  * hierarchy for these templates is $comment_type.php, comment.php.
  *
- * @package Retro-fitted
+ * @package Trending
  * @subpackage Template
  */
 
@@ -28,7 +28,7 @@ if ( post_password_required() || ( !have_comments() && !comments_open() && !ping
 
 				<h3 id="comments-number" class="comments-header"><?php comments_number( __( 'No Responses', hybrid_get_textdomain() ), __( 'One Response', hybrid_get_textdomain() ), __( '% Responses', hybrid_get_textdomain() ) ); ?></h3>
 
-				<?php do_atomic( 'before_comment_list' );// retro-fitted_before_comment_list ?>
+				<?php do_atomic( 'before_comment_list' );// trending_before_comment_list ?>
 
 				<?php if ( get_option( 'page_comments' ) ) : ?>
 					<div class="comments-nav">
@@ -42,7 +42,7 @@ if ( post_password_required() || ( !have_comments() && !comments_open() && !ping
 					<?php wp_list_comments( hybrid_list_comments_args() ); ?>
 				</ol><!-- .comment-list -->
 
-				<?php do_atomic( 'after_comment_list' ); // retro-fitted_after_comment_list ?>
+				<?php do_atomic( 'after_comment_list' ); // trending_after_comment_list ?>
 
 			<?php endif; ?>
 

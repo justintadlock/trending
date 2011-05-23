@@ -6,7 +6,7 @@
  * to the comment type (comment.php, comment-{$comment_type}.php, comment-pingback.php, 
  * comment-trackback.php) in a child theme.
  *
- * @package Prototype
+ * @package Trending
  * @subpackage Template
  */
 
@@ -15,11 +15,11 @@
 
 	<li id="comment-<?php comment_ID(); ?>" class="<?php hybrid_comment_class(); ?>">
 
-		<?php do_atomic( 'before_comment' ); // prototype_before_comment ?>
+		<?php do_atomic( 'before_comment' ); // trending_before_comment ?>
 
 		<div class="comment-wrap">
 
-			<?php do_atomic( 'open_comment' ); // prototype_open_comment ?>
+			<?php do_atomic( 'open_comment' ); // trending_open_comment ?>
 
 			<?php echo hybrid_avatar(); ?>
 
@@ -35,10 +35,10 @@
 
 			<?php echo do_shortcode( '[comment-reply-link]' ); ?>
 
-			<?php do_atomic( 'close_comment' ); // prototype_close_comment ?>
+			<?php do_atomic( 'close_comment' ); // trending_close_comment ?>
 
 		</div><!-- .comment-wrap -->
 
-		<?php do_atomic( 'after_comment' ); // prototype_after_comment ?>
+		<?php do_atomic( 'after_comment' ); // trending_after_comment ?>
 
 	<?php /* No closing </li> is needed.  WordPress will know where to add it. */ ?>

@@ -4,7 +4,7 @@
  *
  * Displays any widgets for the Before Content dynamic sidebar if they are available.
  *
- * @package Retro-fitted
+ * @package Trending
  * @subpackage Template
  */
 

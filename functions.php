@@ -70,9 +70,6 @@ function trending_theme_setup() {
 	add_theme_support( 'automatic-feed-links' );
 	add_custom_background();
 
-	/* Register theme widgets. */
-	add_action( 'widgets_init', 'trending_register_widgets' );
-
 	/* Filter the breadcrumb trail arguments. */
 	add_filter( 'breadcrumb_trail_args', 'trending_breadcrumb_trail_args' );
 
@@ -86,15 +83,21 @@ function trending_theme_setup() {
 	/* Add classes to the comments pagination. */
 	add_filter( 'previous_comments_link_attributes', 'trending_previous_comments_link_attributes' );
 	add_filter( 'next_comments_link_attributes', 'trending_next_comments_link_attributes' );
+
+	/* Add an avatar class to the comments class. */
+	add_filter( 'comment_class', 'trending_comment_class' );
+
+	/* Add custom image sizes. */
+	add_action( 'init', 'trending_add_image_sizes' );
 }
 
 /**
- * Registers additional widgets for the theme.
+ * Adds custom image sizes for featured images.  The 'feature' image size is used for sticky posts.
  *
  * @since 0.1.0
  */
-function trending_register_widgets() {
-	register_widget( 'Trending_Widget_Trending_Posts' );
+function trending_add_image_sizes() {
+	add_image_size( 'feature', 600, 200, true );
 }
 
 /**
@@ -220,7 +223,7 @@ function trending_get_image_size_links() {
 		$image = wp_get_attachment_image_src( get_the_ID(), $size );
 
 		/* Add the link to the array if there's an image and if $is_intermediate (4th array value) is true or full size. */
-		if ( !empty( $image ) && ( true == $image[3] || 'full' == $size ) )
+		if ( !empty( $image ) && ( true === $image[3] || 'full' == $size ) )
 			$links[] = "<a class='image-size-link' href='{$image[0]}'>{$image[1]} &times; {$image[2]}</a>";
 	}
 
@@ -228,141 +231,23 @@ function trending_get_image_size_links() {
 	return join( ' <span class="sep">/</span> ', $links );
 }
 
+/**
+ * Adds a 'has-avatar' class to the comment class array.  This is a temporary function that will be removed 
+ * once this theme is updated to Hybrid Core 1.2.0, which is currently in beta.
+ *
+ * @since 0.1.0
+ */
+function trending_comment_class( $classes ) {
+	global $comment;
 
+	/* Get comment types that are allowed to have an avatar. */
+	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
 
+	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
+	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
+		$classes[] = 'has-avatar';
 
-
-
-class Trending_Widget_Trending_Posts extends WP_Widget {
-
-	/**
-	 * Prefix for the widget.
-	 * @since 0.1.0
-	 */
-	var $prefix;
-
-	/**
-	 * Textdomain for the widget.
-	 * @since 0.1.0
-	 */
-	var $textdomain;
-
-	/**
-	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.1.0
-	 */
-	function Trending_Widget_Trending_Posts() {
-
-		/* Set the widget prefix. */
-		$this->prefix = hybrid_get_prefix();
-
-		/* Set the widget textdomain. */
-		$this->textdomain = hybrid_get_textdomain();
-
-		/* Set up the widget options. */
-		$widget_options = array(
-			'classname' => 'trending-posts',
-			'description' => esc_html__( 'Displays the currently trending posts.', $this->textdomain )
-		);
-
-		/* Set up the widget control options. */
-		$control_options = array(
-			'width' => 200,
-			'height' => 350,
-			'id_base' => "{$this->prefix}-trending-posts"
-		);
-
-		/* Create the widget. */
-		$this->WP_Widget( "{$this->prefix}-trending-posts", esc_attr__( 'Trending Posts', $this->textdomain ), $widget_options, $control_options );
-	}
-
-	/**
-	 * Outputs the widget based on the arguments input through the widget controls.
-	 * @since 0.1.0
-	 */
-	function widget( $args, $instance ) {
-		extract( $args );
-
-		/* Output the theme's $before_widget wrapper. */
-		echo $before_widget;
-
-		/* If a title was input by the user, display it. */
-		if ( !empty( $instance['title'] ) )
-			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
-
-		$loop = new WP_Query( array( 'posts_per_page' => 5, 'ignore_sticky_posts' => true ) ); $i = 0; ?>
-
-		<?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
-
-			<div class="<?php hybrid_entry_class( ( ++$i == 1 ? 'first' : '' ) ); ?>">
-				<?php get_the_image( array( 'meta_key' => 'Thumbnail', 'size' => 'thumbnail' ) ); ?>
-				<?php the_title( '<h4 class="entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '">', '</a></h4>' ); ?>
-				<span class="comments-count"><?php comments_number( __( '(0 Comments)', $this->textdomain ), __( '(1 Comment)', $this->textdomain ), __( '(%s Comments)', $this->textdomain ) ); ?></span>
-			</div>
-		<?php endwhile;
-
-		/* Close the theme's widget wrapper. */
-		echo $after_widget;
-	}
-
-	/**
-	 * Updates the widget control options for the particular instance of the widget.
-	 * @since 0.1.0
-	 */
-	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-
-		$instance = $new_instance;
-
-		$instance['title'] = strip_tags( $new_instance['title'] );
-
-		return $instance;
-	}
-
-	/**
-	 * Displays the widget control options in the Widgets admin screen.
-	 * @since 0.1.0
-	 */
-	function form( $instance ) {
-
-		/* Set up the default form values. */
-		$defaults = array(
-			'title' => esc_attr__( 'Trending', $this->textdomain ),
-			'posts_per_page' => 5,
-		);
-
-		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
-
-
-		<div class="hybrid-widget-controls columns-1">
-		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', $this->textdomain ); ?></label>
-			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
-		</p>
-		</div>
-		<div style="clear:both;">&nbsp;</div>
-	<?php
-	}
-
+	return $classes;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ?>

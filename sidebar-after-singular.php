@@ -4,7 +4,7 @@
  *
  * Displays any widgets for the After Singular dynamic sidebar if they are available.
  *
- * @package Prototype
+ * @package Trending
  * @subpackage Template
  */
 
