@@ -12,14 +12,12 @@
 
 	<?php if ( is_home() && !is_front_page() ) : ?>
 
-		<?php global $wp_query; ?>
-
 		<div class="loop-meta">
 
-			<h1 class="loop-title"><?php echo get_post_field( 'post_title', $wp_query->get_queried_object_id() ); ?></h1>
+			<h1 class="loop-title"><?php echo get_post_field( 'post_title', get_queried_object_id() ); ?></h1>
 
 			<div class="loop-description">
-				<?php echo apply_filters( 'the_excerpt', get_post_field( 'post_excerpt', $wp_query->get_queried_object_id() ) ); ?>
+				<?php echo apply_filters( 'the_excerpt', get_post_field( 'post_excerpt', get_queried_object_id() ) ); ?>
 			</div><!-- .loop-description -->
 
 		</div><!-- .loop-meta -->
@@ -52,7 +50,7 @@
 
 		<div class="loop-meta">
 
-			<h1 class="loop-title"><?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) ); echo $term->name; ?></h1>
+			<h1 class="loop-title"><?php single_term_title(); ?></h1>
 
 			<div class="loop-description">
 				<?php echo term_description( '', get_query_var( 'taxonomy' ) ); ?>
@@ -90,7 +88,7 @@
 
 			<div class="loop-description">
 				<p>
-				<?php printf( __( 'You are browsing the search results for &quot;%1$s&quot;', hybrid_get_textdomain() ), esc_attr( get_search_query() ) ); ?>
+				<?php printf( __( 'You are browsing the search results for "%s"', hybrid_get_textdomain() ), esc_attr( get_search_query() ) ); ?>
 				</p>
 			</div><!-- .loop-description -->
 

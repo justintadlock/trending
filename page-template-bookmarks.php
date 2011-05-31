@@ -1,9 +1,8 @@
 <?php
 /**
- * Index Template
+ * Template Name: Bookmarks
  *
- * This is the default template.  It is used when a more specific template can't be found to display
- * posts.  It is unlikely that this template will ever be used, but there may be rare cases.
+ * A custom page template for displaying the site's bookmarks/links.
  *
  * @package Trending
  * @subpackage Template
@@ -19,8 +18,6 @@ get_header(); // Loads the header.php template. ?>
 
 		<div class="hfeed">
 
-			<?php get_template_part( 'loop-meta' ); // Loads the loop-meta.php template. ?>
-
 			<?php if ( have_posts() ) : ?>
 
 				<?php while ( have_posts() ) : the_post(); ?>
@@ -33,14 +30,27 @@ get_header(); // Loads the header.php template. ?>
 
 						<?php echo apply_atomic_shortcode( 'entry_title', '[entry-title]' ); ?>
 
-						<?php echo apply_atomic_shortcode( 'byline', '<div class="byline">' . __( 'By [entry-author] on [entry-published] [entry-comments-link before=" | "] [entry-edit-link before=" | "]', hybrid_get_textdomain() ) . '</div>' ); ?>
+						<div class="entry-content">
+							<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) ); ?>
 
-						<div class="entry-summary">
-							<?php the_excerpt(); ?>
+							<?php $args = array(
+								'title_li' => false,
+								'title_before' => '<h2>',
+								'title_after' => '</h2>',
+								'category_before' => false,
+								'category_after' => false,
+								'categorize' => true,
+								'show_description' => true,
+								'between' => '<br />',
+								'show_images' => false,
+								'show_rating' => false,
+							); ?>
+							<?php wp_list_bookmarks( $args ); ?>
+
 							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', hybrid_get_textdomain() ), 'after' => '</p>' ) ); ?>
-						</div><!-- .entry-summary -->
+						</div><!-- .entry-content -->
 
-						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta"><a class="more-link" href="' . get_permalink() . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) . '</a></div>' ); ?>
+						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta">[entry-edit-link]</div>' ); ?>
 
 						<?php do_atomic( 'close_entry' ); // trending_close_entry ?>
 
@@ -48,19 +58,19 @@ get_header(); // Loads the header.php template. ?>
 
 					<?php do_atomic( 'after_entry' ); // trending_after_entry ?>
 
+					<?php get_sidebar( 'after-singular' ); // Loads the sidebar-after-singular.php template. ?>
+
+					<?php do_atomic( 'after_singular' ); // trending_after_singular ?>
+
+					<?php comments_template( '/comments.php', true ); // Loads the comments.php template. ?>
+
 				<?php endwhile; ?>
-
-			<?php else : ?>
-
-				<?php get_template_part( 'loop-error' ); // Loads the loop-error.php template. ?>
 
 			<?php endif; ?>
 
 		</div><!-- .hfeed -->
 
 		<?php do_atomic( 'close_content' ); // trending_close_content ?>
-
-		<?php get_template_part( 'loop-nav' ); // Loads the loop-nav.php template. ?>
 
 	</div><!-- #content -->
 

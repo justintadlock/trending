@@ -65,6 +65,6 @@
 
 			<?php do_atomic( 'open_main' ); // trending_open_main ?>
 
-			<?php if ( current_theme_supports( 'breadcrumb-trail' ) ) breadcrumb_trail(); ?>
+			<?php if ( current_theme_supports( 'breadcrumb-trail' ) ) breadcrumb_trail( array( 'before' => __( 'You are here:', hybrid_get_textdomain() ) ) ); ?>
 
 			<?php get_sidebar( 'before-content' ); // Loads the sidebar-before-content.php template. ?>

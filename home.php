@@ -47,7 +47,7 @@ get_header(); // Loads the header.php template. ?>
 							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', hybrid_get_textdomain() ), 'after' => '</p>' ) ); ?>
 						</div><!-- .entry-summary -->
 
-						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta"><a class="more-link" href="' . get_permalink() . '">' . __( 'Continue Reading &rarr;', hybrid_get_textdomain() ) . '</a></div>' ); ?>
+						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta"><a class="more-link" href="' . get_permalink() . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) . '</a></div>' ); ?>
 
 						<?php do_atomic( 'close_entry' ); // trending_close_entry ?>
 
