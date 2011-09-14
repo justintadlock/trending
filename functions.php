@@ -20,7 +20,7 @@
  *
  * @package Trending
  * @subpackage Functions
- * @version 0.1.0
+ * @version 0.2.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2011, Justin Tadlock
  * @link http://themehybrid.com/themes/trending
@@ -50,9 +50,7 @@ function trending_theme_setup() {
 	add_theme_support( 'hybrid-core-sidebars', array( 'primary', 'secondary', 'header', 'before-content', 'after-content', 'after-singular' ) );
 	add_theme_support( 'hybrid-core-widgets' );
 	add_theme_support( 'hybrid-core-shortcodes' );
-	add_theme_support( 'hybrid-core-post-meta-box' );
-	add_theme_support( 'hybrid-core-theme-settings' );
-	add_theme_support( 'hybrid-core-meta-box-footer' );
+	add_theme_support( 'hybrid-core-theme-settings', array( 'about', 'footer' ) );
 	add_theme_support( 'hybrid-core-drop-downs' );
 	add_theme_support( 'hybrid-core-seo' );
 	add_theme_support( 'hybrid-core-template-hierarchy' );
@@ -72,6 +70,9 @@ function trending_theme_setup() {
 
 	/* Embed width/height defaults. */
 	add_filter( 'embed_defaults', 'trending_embed_defaults' );
+
+	/* Set content width. */
+	hybrid_set_content_width( 600 );
 
 	/* Filter the sidebar widgets. */
 	add_filter( 'sidebars_widgets', 'trending_disable_sidebars' );
@@ -107,7 +108,7 @@ function trending_one_column() {
 	if ( !is_active_sidebar( 'primary' ) && !is_active_sidebar( 'secondary' ) )
 		add_filter( 'get_theme_layout', 'trending_theme_layout_one_column' );
 
-	elseif ( is_attachment() )
+	elseif ( is_attachment() && 'layout-default' == theme_layouts_get_layout() )
 		add_filter( 'get_theme_layout', 'trending_theme_layout_one_column' );
 }
 
@@ -207,30 +208,11 @@ function trending_get_image_size_links() {
 
 		/* Add the link to the array if there's an image and if $is_intermediate (4th array value) is true or full size. */
 		if ( !empty( $image ) && ( true === $image[3] || 'full' == $size ) )
-			$links[] = "<a class='image-size-link' href='{$image[0]}'>{$image[1]} &times; {$image[2]}</a>";
+			$links[] = "<a class='image-size-link' href='" . esc_url( $image[0] ) . "'>{$image[1]} &times; {$image[2]}</a>";
 	}
 
 	/* Join the links in a string and return. */
 	return join( ' <span class="sep">/</span> ', $links );
-}
-
-/**
- * Adds a 'has-avatar' class to the comment class array.  This is a temporary function that will be removed 
- * once this theme is updated to Hybrid Core 1.2.0, which is currently in beta.
- *
- * @since 0.1.0
- */
-function trending_comment_class( $classes ) {
-	global $comment;
-
-	/* Get comment types that are allowed to have an avatar. */
-	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
-
-	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
-	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
-		$classes[] = 'has-avatar';
-
-	return $classes;
 }
 
 /**
