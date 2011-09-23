@@ -20,7 +20,7 @@
  *
  * @package Trending
  * @subpackage Functions
- * @version 0.2.0
+ * @version 0.2.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2011, Justin Tadlock
  * @link http://themehybrid.com/themes/trending
