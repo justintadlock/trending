@@ -82,9 +82,6 @@ function trending_theme_setup() {
 	add_filter( 'previous_comments_link_attributes', 'trending_previous_comments_link_attributes' );
 	add_filter( 'next_comments_link_attributes', 'trending_next_comments_link_attributes' );
 
-	/* Add an avatar class to the comments class. */
-	add_filter( 'comment_class', 'trending_comment_class' );
-
 	/* Add custom image sizes. */
 	add_action( 'init', 'trending_add_image_sizes' );
 }
