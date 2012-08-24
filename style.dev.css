@@ -776,6 +776,9 @@ img.wp-smiley {
 .comment-list li.has-avatar {
 	background: #fff url(images/comment-bg.png) repeat-y 0 0;
 	}
+.comment-list li.pingback, .comment-list li.trackback {
+	background: #fff;
+	}
 .comment-list li li.comment {
 	padding-left: 20px;
 	background: #fff;
@@ -806,6 +809,9 @@ img.wp-smiley {
 	margin: 0 0 15px 0;
 	font-size: 12px;
 	color: #999;
+	}
+.comment-author {
+	display: block;
 	}
 .comment-author cite {
 	font-style: normal;
