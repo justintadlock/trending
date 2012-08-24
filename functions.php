@@ -66,7 +66,16 @@ function trending_theme_setup() {
 
 	/* Add theme support for WordPress features. */
 	add_theme_support( 'automatic-feed-links' );
-	add_custom_background( 'trending_custom_background_callback' );
+
+	/* Add support for a custom background. */
+	add_theme_support( 
+		'custom-background',
+		array(
+			'default-color' => 'f7f7f7',
+			'default-image' => trailingslashit( get_template_directory_uri() ) . 'images/gray-cross.png',
+			'wp-head-callback' => 'trending_custom_background_callback'
+		)
+	);
 
 	/* Embed width/height defaults. */
 	add_filter( 'embed_defaults', 'trending_embed_defaults' );
@@ -222,27 +231,40 @@ function trending_get_image_size_links() {
  */
 function trending_custom_background_callback() {
 
-	/* Get the background image. */
-	$image = get_background_image();
+	// $background is the saved custom image, or the default image.
+	$background = get_background_image();
 
-	/* If there's an image, just call the normal WordPress callback. We won't do anything here. */
-	if ( !empty( $image ) ) {
-		_custom_background_cb();
-		return;
-	}
-
-	/* Get the background color. */
+	// $color is the saved custom color.
 	$color = get_background_color();
 
-	/* If no background color, return. */
-	if ( empty( $color ) )
+	if ( ! $background && ! $color )
 		return;
 
-	/* Use 'background' instead of 'background-color'. */
-	$style = "background: #{$color};";
+	$style = $color ? "background-color: #$color;" : '';
+
+	if ( $background ) {
+		$image = " background-image: url('$background');";
+
+		$repeat = get_theme_mod( 'background_repeat', 'repeat' );
+		if ( ! in_array( $repeat, array( 'no-repeat', 'repeat-x', 'repeat-y', 'repeat' ) ) )
+			$repeat = 'repeat';
+		$repeat = " background-repeat: $repeat;";
+
+		$position = get_theme_mod( 'background_position_x', 'left' );
+		if ( ! in_array( $position, array( 'center', 'right', 'left' ) ) )
+			$position = 'left';
+		$position = " background-position: top $position;";
+
+		$attachment = get_theme_mod( 'background_attachment', 'scroll' );
+		if ( ! in_array( $attachment, array( 'fixed', 'scroll' ) ) )
+			$attachment = 'scroll';
+		$attachment = " background-attachment: $attachment;";
+
+		$style .= $image . $repeat . $position . $attachment;
+	}
 
 ?>
-<style type="text/css">body { <?php echo trim( $style ); ?> }</style>
+<style type="text/css">body.custom-background { <?php echo trim( $style ); ?> }</style>
 <?php
 
 }
