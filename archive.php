@@ -34,14 +34,14 @@ get_header(); // Loads the header.php template. ?>
 
 						<?php echo apply_atomic_shortcode( 'entry_title', '[entry-title]' ); ?>
 
-						<?php echo apply_atomic_shortcode( 'byline', '<div class="byline">' . __( 'By [entry-author] on [entry-published] [entry-comments-link before=" | "] [entry-edit-link before=" | "]', hybrid_get_textdomain() ) . '</div>' ); ?>
+						<?php echo apply_atomic_shortcode( 'byline', '<div class="byline">' . __( 'By [entry-author] on [entry-published] [entry-comments-link before=" | "] [entry-edit-link before=" | "]', 'trending' ) . '</div>' ); ?>
 
 						<div class="entry-summary">
 							<?php the_excerpt(); ?>
-							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', hybrid_get_textdomain() ), 'after' => '</p>' ) ); ?>
+							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', 'trending' ), 'after' => '</p>' ) ); ?>
 						</div><!-- .entry-summary -->
 
-						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta"><a class="more-link" href="' . get_permalink() . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) . '</a></div>' ); ?>
+						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta"><a class="more-link" href="' . get_permalink() . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'trending' ) . '</a></div>' ); ?>
 
 						<?php do_atomic( 'close_entry' ); // trending_close_entry ?>
 

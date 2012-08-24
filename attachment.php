@@ -31,7 +31,7 @@ get_header(); // Loads the header.php template. ?>
 
 						<?php echo apply_atomic_shortcode( 'entry_title', '[entry-title]' ); ?>
 
-						<?php if ( wp_attachment_is_image( get_the_ID() ) ) echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta">' . sprintf( __( 'Sizes: %s', hybrid_get_textdomain() ), trending_get_image_size_links() ) . '</div>' ); ?>
+						<?php if ( wp_attachment_is_image( get_the_ID() ) ) echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta">' . sprintf( __( 'Sizes: %s', 'trending' ), trending_get_image_size_links() ) . '</div>' ); ?>
 
 						<div class="entry-content">
 							<?php if ( wp_attachment_is_image( get_the_ID() ) ) : ?>
@@ -45,19 +45,19 @@ get_header(); // Loads the header.php template. ?>
 								<?php hybrid_attachment(); // Function for handling non-image attachments. ?>
 
 								<p class="download">
-									<a href="<?php echo wp_get_attachment_url(); ?>" title="<?php the_title_attribute(); ?>" rel="enclosure" type="<?php echo get_post_mime_type(); ?>"><?php printf( __( 'Download "%s";', hybrid_get_textdomain() ), the_title( '<span class="fn">', '</span>', false) ); ?></a>
+									<a href="<?php echo wp_get_attachment_url(); ?>" title="<?php the_title_attribute(); ?>" rel="enclosure" type="<?php echo get_post_mime_type(); ?>"><?php printf( __( 'Download "%s";', 'trending' ), the_title( '<span class="fn">', '</span>', false) ); ?></a>
 								</p><!-- .download -->
 
 							<?php endif; ?>
 
-							<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) ); ?>
-							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', hybrid_get_textdomain() ), 'after' => '</p>' ) ); ?>
+							<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'trending' ) ); ?>
+							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', 'trending' ), 'after' => '</p>' ) ); ?>
 						</div><!-- .entry-content -->
 
 						<?php if ( wp_attachment_is_image( get_the_ID() ) ) {
 							$gallery = do_shortcode( sprintf( '[gallery id="%1$s" exclude="%2$s" columns="8" numberposts="16" orderby="rand"]', $post->post_parent, get_the_ID() ) );
 							if ( !empty( $gallery ) )
-								echo '<h3>' . __( 'Gallery', hybrid_get_textdomain() ) . '</h3>' . $gallery;
+								echo '<h3>' . __( 'Gallery', 'trending' ) . '</h3>' . $gallery;
 						}
 						?>
 
